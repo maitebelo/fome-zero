@@ -54,7 +54,7 @@ const ForgotPassword = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <button type="submit" className="button">
+                        <button type="submit" className="loginButton">
                             {formOptions.buttonLabel}
                         </button>
                     </form>
