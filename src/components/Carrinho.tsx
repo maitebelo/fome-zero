@@ -38,7 +38,7 @@ const Carrinho = () => {
     }
 
     return (
-        <section className="menu">
+        <section className="menu vFlex">
             <h1 className="headerh1">Carrinho</h1>
             {cart ? (
                 cart?.products?.length === 0 ? (

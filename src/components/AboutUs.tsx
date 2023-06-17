@@ -4,7 +4,7 @@ const AboutUs = () => {
     return (
         <>
             <div className="abtUs">
-                <div>
+                <div className="abtUsText">
                     <h1 className="headerh1">Sobre Nós</h1>
                     <p>
                         O Fome Zero surgiu como uma solução inovadora para atender às necessidades dos consumidores e

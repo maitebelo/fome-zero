@@ -23,7 +23,7 @@ const Menu = () => {
     }, []);
 
     return (
-        <section className="menu">
+        <section className="menu vFlex" id="menu">
             <h1 className="headerh1">Cardápio</h1>
             {menu.length > 0 ? (
                 <div className="menu-list">

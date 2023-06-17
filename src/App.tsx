@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -49,6 +49,7 @@ function ProtectedRouteGuard({ children }: { children: React.ReactNode }) {
     const token = useToken();
 
     if (!token) {
+        toast.error("Você precisa estar logado para acessar esta página");
         return <Navigate to="/login" />;
     }
 
