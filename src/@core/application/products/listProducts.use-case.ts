@@ -9,4 +9,10 @@ export class ListProductUseCase {
 
         return JSON.parse(JSON.stringify(products));
     }
+
+    async getById(id: string): Promise<Product> {
+        const product = await this.productGateway.getById(id);
+
+        return JSON.parse(JSON.stringify(product));
+    }
 }

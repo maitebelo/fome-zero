@@ -125,6 +125,7 @@ li:last-child {
     text-decoration: none;
     font-size: 1.5rem;
     transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -148,6 +149,13 @@ li:last-child {
     flex-direction: column;
 }
 
+.menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
 .menu-item {
     width: 330px;
     background-color: #f2f2f2;
@@ -162,8 +170,11 @@ li:last-child {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
+.hFit {
+    height: fit-content;
+}
+
 .menu-item img {
-    margin: auto;
     display: block;
     width: 100%;
     height: auto;
@@ -183,6 +194,7 @@ li:last-child {
     padding: 10px;
     font-size: 16px;
     color: #666;
+    min-height: 35%;
 }
 
 .menu-item span {
@@ -209,6 +221,7 @@ li:last-child {
     transition: background-color 0.3s ease;
     margin-left: auto;
     margin-right: auto;
+    margin-top: auto;
 }
 
 .button:hover {
@@ -273,6 +286,10 @@ footer a:hover {
     flex-direction: row !important;
     align-items: center;
     justify-content: space-between;
+}
+
+.mTAuto {
+    margin-top: auto;
 }
 
 .hReverse {
