@@ -165,6 +165,10 @@ li:last-child {
     cursor: pointer;
 }
 
+.cursor {
+    cursor: pointer;
+}
+
 .button:hover {
     background-color: #000;
     color: #fff;
@@ -178,11 +182,21 @@ li:last-child {
     gap: 20px;
 }
 
+.vFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .menu {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
+    justify-content: center;
+}
+.ml-auto {
+    margin-left: auto;
 }
 
 .menu-list {
@@ -190,6 +204,7 @@ li:last-child {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
+    justify-content: center;
 }
 
 .menu-item {
@@ -231,6 +246,8 @@ li:last-child {
     font-size: 16px;
     color: #666;
     height: 220px;
+    max-height: 150px;
+    overflow: auto;
 }
 
 .menu-item span {
@@ -462,6 +479,7 @@ footer a:hover {
     }
 
     .headerh1{
+        text-align: center;
         justify-content: center;
     }
 
