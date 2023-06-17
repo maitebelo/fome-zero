@@ -12,7 +12,6 @@ export class ProductFirebaseGateway implements ProductGateway {
                 .get()
                 .then((querySnapshot) => {
                     return querySnapshot.docs.map((doc) => {
-                        console.log("doc", doc)
                         const data = doc.data();
                         return new Product({
                             id: doc.id,
@@ -24,7 +23,29 @@ export class ProductFirebaseGateway implements ProductGateway {
                     });
                 });
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    async getById(id: string): Promise<Product> {
+        try {
+            return await this.firestore
+                .collection("products")
+                .doc(id)
+                .get()
+                .then((doc) => {
+                    const data = doc.data();
+                    return new Product({
+                        id: doc.id,
+                        name: data?.name,
+                        price: data?.price,
+                        description: data?.description,
+                        image: data?.image,
+                    });
+                });
+        } catch (error) {
+            console.error(error);
             throw new Error("Method not implemented.");
         }
     }
