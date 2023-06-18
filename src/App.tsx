@@ -16,6 +16,8 @@ import Login from "components/Login";
 import useToken from "utils/hooks/useToken";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "contexts/UserContext";
+import HistoryScreen from "components/HistoryScreen";
+import Register from "components/Register";
 
 const App = () => {
     return (
@@ -34,8 +36,10 @@ const App = () => {
                             </ProtectedRouteGuard>
                         }
                     ></Route>
+                    <Route path="/history" element={<ProtectedRouteGuard><HistoryScreen /></ProtectedRouteGuard>} />
                     <Route path="/esqueci-minha-senha" element={<ForgotPassword />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Navigate replace to="/" />} />
                 </Routes>
                 <Footer />
