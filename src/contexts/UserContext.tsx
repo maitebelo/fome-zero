@@ -6,6 +6,7 @@ const UserContext = createContext({
     userData: {
         token: "",
         email: "",
+        uid: "",
     },
     setUserData: (data: any) => {},
 });

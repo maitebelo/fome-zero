@@ -34,6 +34,7 @@ const App = () => {
                             </ProtectedRouteGuard>
                         }
                     ></Route>
+                    <Route path="/history" element={<ProtectedRouteGuard>HistoricoPedidos</ProtectedRouteGuard>} />
                     <Route path="/esqueci-minha-senha" element={<ForgotPassword />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={<Navigate replace to="/" />} />

@@ -30,8 +30,10 @@ const Login = () => {
         try {
             await loginService.execute(email, password).then((data) => {
                 toast.success("Usuário logado com sucesso.");
+                
                 setUserData({
                     email: data?.email,
+                    uid: data?.uid,
                     // @ts-ignore
                     token: data?.stsTokenManager?.accessToken,
                 });

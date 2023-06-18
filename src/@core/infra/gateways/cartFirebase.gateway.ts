@@ -105,4 +105,37 @@ export class CartFirebaseGateway implements CartGateway {
             throw new Error("Method not implemented.");
         }
     }
+
+    async removeProduct(productId: string, userId: string): Promise<Cart> {
+        try {
+            const cart = await this.myCart(userId);
+
+            const productIndex = cart?.products.findIndex((product) => product?.id === productId);
+
+            if (productIndex >= 0) {
+                cart.products.splice(productIndex, 1);
+            }
+
+            await this.firestore
+                .collection("cart")
+                .doc(cart.id)
+                .update({
+                    products: [
+                        ...cart?.products?.map((product) => ({
+                            product: this.firestore
+                                .collection("products")
+                                // @ts-ignore
+                                .doc(`${product?.id}`),
+                            quantity: product.quantity,
+                        })),
+                    ],
+                    updatedAt: new Date(),
+                });
+
+            return cart;
+        } catch (error) {
+            console.error(error);
+            throw new Error("Method not implemented.");
+        }
+    }
 }
