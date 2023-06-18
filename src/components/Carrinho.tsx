@@ -1,20 +1,27 @@
+import React from "react";
+import { toast } from "react-toastify";
+import { BsFillTrashFill } from "react-icons/bs";
+
 import { MyCartUseCase } from "@core/application/cart/myCart.use-case";
 import { Cart } from "@core/domain/entities/Cart";
 import { Registry, container } from "@core/infra/container.registry";
-import React from "react";
+import UserContext from "contexts/UserContext";
+import { RemoveProductUseCase } from "@core/application/cart/removeProduct.use-case";
+import { Product } from "@core/domain/entities/Products";
+import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
 
 const Carrinho = () => {
+    const { userData } = React.useContext(UserContext);
     const [cart, setCart] = React.useState<Cart>();
     const [isntCart, setIsntCart] = React.useState<boolean>(false);
+    const myCartUseCase = container.get<MyCartUseCase>(Registry.MyCartUseCase);
+
+    const getCart = async () => {
+        return await myCartUseCase.execute(userData?.uid);
+    };
 
     React.useEffect(() => {
-        const myCartUseCase = container.get<MyCartUseCase>(Registry.MyCartUseCase);
-
-        const cart = async () => {
-            return await myCartUseCase.execute("WdCSLmbW12SPNvHdif5ZkNygOqF2");
-        };
-
-        cart().then((response) => {
+        getCart().then((response) => {
             if (!response) {
                 setIsntCart(true);
             }
@@ -32,10 +39,66 @@ const Carrinho = () => {
             })
             .join("%0A");
 
-        const message = `Olá, gostaria de fazer o pedido:%0A - ${products}%0A%0ATotal: R$ ${totalPrice}`;
+        const message = `Olá, gostaria de fazer o pedido:%0A - ${products}%0A%0ATotal: R$ ${totalPrice?.toFixed(2)}`;
 
         window.open(`https://wa.me/5511999999999?text=${message}`, "_blank");
+
+        toast.success("Pedido enviado no whatsapp");
     }
+
+    const removeProduct = async (item: Product) => {
+        toast.loading("Removendo produto do carrinho");
+
+        const removeProductUseCase = container.get<RemoveProductUseCase>(Registry.RemoveProductUseCase);
+
+        await removeProductUseCase.execute(item.id, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Produto removido do carrinho");
+    };
+
+    const incrementProduct = async (item: Product) => {
+        toast.loading("Incrementando produto no carrinho");
+
+        const addProductUseCase = container.get<AddProductOnCartUseCase>(Registry.AddProductOnCartUseCase);
+
+        await addProductUseCase.increment(item.id, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Produto incrementado no carrinho");
+    };
+
+    const decrementProduct = async (item: Product) => {
+        toast.loading("Decrementando produto no carrinho");
+
+        const removeProductUseCase = container.get<RemoveProductUseCase>(Registry.RemoveProductUseCase);
+
+        await removeProductUseCase.decrement(item.id, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Produto decrementado no carrinho");
+    };
 
     return (
         <section className="menu vFlex">
@@ -48,14 +111,36 @@ const Carrinho = () => {
                 ) : (
                     <div className="menu">
                         <div className="menu-list">
-                            {cart?.products?.map((item: any) => (
-                                <div className="menu-item" key={cart.id}>
+                            {cart?.products?.map((item: any, index: number) => (
+                                <div className="menu-item" key={index}>
                                     <img src={item?.image} alt={item.name} />
-                                    <h2 className="itemName">{item?.name}</h2>
+                                    <div className="hFlex">
+                                        <h2 className="itemName">{item?.name}</h2>
+                                        <button
+                                            onClick={() => removeProduct(item)}
+                                            className="cart-button"
+                                        >
+                                            <BsFillTrashFill size={20} />
+                                        </button>
+                                    </div>
                                     <p className="itemDescription">{item.description}</p>
+                                    <div className="hFlex mLRAuto">
+                                        <button
+                                            onClick={() => decrementProduct(item)}
+                                            className="cart-button"
+                                        >
+                                            -
+                                        </button>
+                                        <span>{item.quantity}</span>
+                                        <button
+                                            onClick={() => incrementProduct(item)}
+                                            className="cart-button"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                     <div className="hFlex mTAuto">
                                         <span>R$ {item.price}</span>
-                                        <span>Quantidade: {item.quantity}</span>
                                     </div>
                                 </div>
                             ))}

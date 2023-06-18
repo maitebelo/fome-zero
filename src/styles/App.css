@@ -95,7 +95,7 @@ li {
     border-radius: 5px;
     transition: background-color 0.3s ease;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 .headerButton {
@@ -194,6 +194,7 @@ li {
     gap: 20px;
     padding: 20px;
     justify-content: center;
+    flex-direction: column;
 }
 .ml-auto {
     margin-left: auto;
@@ -223,6 +224,23 @@ li {
 
 .hFit {
     height: fit-content;
+}
+
+.mLRAuto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #fff;
+    background-color: #4a9655;
+    border-radius: 5px;
+    margin-right: 10px;
+    min-width: 30px;
 }
 
 .menu-item img {
@@ -410,6 +428,11 @@ footer a:hover {
     font-size: 18px;
     line-height: 30px;
 }
+
+.headerh1 {
+    text-align: center !important;
+}
+
 .history-screen {
     padding: 20px;
     text-align: center;
@@ -545,8 +568,8 @@ footer a:hover {
         padding: 2px;
     }
 
-    .headerh1{
-        text-align: center;
+    .headerh1 {
+        text-align: center !important;
         justify-content: center;
     }
 
@@ -606,7 +629,7 @@ footer a:hover {
         /* padding: 20px; */
     }
 
-    .abtUs h1{
+    .abtUs h1 {
         text-align: center;
     }
 
@@ -641,7 +664,7 @@ footer a:hover {
         margin: 0;
     }
 
-    .container img{
+    .container img {
         display: none;
     }
 }

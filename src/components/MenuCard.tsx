@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import { Registry, container } from "../@core/infra/container.registry";
 import { Product } from "@core/domain/entities/Products";
 import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
+import UserContext from "contexts/UserContext";
 
 const MenuCard = ({ item }: { item: Product }) => {
+    const { userData } = React.useContext(UserContext);
     const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
 
     function handleAddProduct(id: string) {
@@ -14,10 +16,11 @@ const MenuCard = ({ item }: { item: Product }) => {
         setButtonLoading(true);
 
         const cart = async () => {
-            return await addProductUseCase.execute(id, 1, "WdCSLmbW12SPNvHdif5ZkNygOqF2");
+            return await addProductUseCase.execute(id, 1, userData?.uid);
         };
         
         cart().then((response) => {
+            setButtonLoading(false);
             toast.success("Produto adicionado ao carrinho");
         });
     }
