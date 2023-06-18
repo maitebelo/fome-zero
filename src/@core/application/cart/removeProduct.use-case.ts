@@ -7,4 +7,8 @@ export class RemoveProductUseCase {
     async execute(productId: string, userId: string): Promise<Cart> {
         return await this.cartGateway.removeProduct(productId, userId);
     }
+
+    async decrement(productId: string, userId: string): Promise<Cart> {
+        return await this.cartGateway.decrementProduct(productId, userId);
+    }
 }

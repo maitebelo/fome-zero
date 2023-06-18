@@ -8,6 +8,7 @@ import { Registry, container } from "@core/infra/container.registry";
 import UserContext from "contexts/UserContext";
 import { RemoveProductUseCase } from "@core/application/cart/removeProduct.use-case";
 import { Product } from "@core/domain/entities/Products";
+import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
 
 const Carrinho = () => {
     const { userData } = React.useContext(UserContext);
@@ -63,6 +64,42 @@ const Carrinho = () => {
         toast.success("Produto removido do carrinho");
     };
 
+    const incrementProduct = async (item: Product) => {
+        toast.loading("Incrementando produto no carrinho");
+
+        const addProductUseCase = container.get<AddProductOnCartUseCase>(Registry.AddProductOnCartUseCase);
+
+        await addProductUseCase.increment(item.id, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Produto incrementado no carrinho");
+    };
+
+    const decrementProduct = async (item: Product) => {
+        toast.loading("Decrementando produto no carrinho");
+
+        const removeProductUseCase = container.get<RemoveProductUseCase>(Registry.RemoveProductUseCase);
+
+        await removeProductUseCase.decrement(item.id, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Produto decrementado no carrinho");
+    };
+
     return (
         <section className="menu vFlex">
             <h1 className="headerh1">Carrinho</h1>
@@ -81,24 +118,29 @@ const Carrinho = () => {
                                         <h2 className="itemName">{item?.name}</h2>
                                         <button
                                             onClick={() => removeProduct(item)}
-                                            style={{
-                                                background: "none",
-                                                border: "none",
-                                                cursor: "pointer",
-                                                padding: "5px",
-                                                color: "#fff",
-                                                backgroundColor: "#4a9655",
-                                                borderRadius: "5px",
-                                                marginRight: "10px",
-                                            }}
+                                            className="cart-button"
                                         >
                                             <BsFillTrashFill size={20} />
                                         </button>
                                     </div>
                                     <p className="itemDescription">{item.description}</p>
+                                    <div className="hFlex mLRAuto">
+                                        <button
+                                            onClick={() => decrementProduct(item)}
+                                            className="cart-button"
+                                        >
+                                            -
+                                        </button>
+                                        <span>{item.quantity}</span>
+                                        <button
+                                            onClick={() => incrementProduct(item)}
+                                            className="cart-button"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                     <div className="hFlex mTAuto">
                                         <span>R$ {item.price}</span>
-                                        <span>Quantidade: {item.quantity}</span>
                                     </div>
                                 </div>
                             ))}

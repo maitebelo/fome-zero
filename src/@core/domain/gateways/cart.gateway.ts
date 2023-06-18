@@ -6,4 +6,8 @@ export interface CartGateway {
     addProduct(productId: string, quantity: number, userId: string): Promise<Cart>;
 
     removeProduct(productId: string, userId: string): Promise<Cart>;
+
+    decrementProduct(productId: string, userId: string): Promise<Cart>;
+
+    incrementProduct(productId: string, userId: string): Promise<Cart>;
 }

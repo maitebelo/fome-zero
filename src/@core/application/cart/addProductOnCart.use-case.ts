@@ -9,4 +9,10 @@ export class AddProductOnCartUseCase {
 
         return JSON.parse(JSON.stringify(cart))
     }
+
+    async increment(productId: string, userId: string): Promise<Cart> {
+        const cart = await this.cartGateway.incrementProduct(productId, userId);
+
+        return JSON.parse(JSON.stringify(cart))
+    }
 } 
