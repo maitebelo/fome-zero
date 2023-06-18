@@ -76,6 +76,7 @@ const Login = () => {
                     <NavLink to="/esqueci-minha-senha" className="redirLink">
                         {formOptions.linkLabel}
                     </NavLink>
+                    <NavLink to="/register" className="redirLink">Cadastre sua conta</NavLink>
                 </div>
                 <div>
                     <img src="./assets/about/Image.png" alt="About Us" height="500px" width="500px" />

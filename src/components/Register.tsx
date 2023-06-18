@@ -1,58 +1,71 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
- 
-import { ForgotPasswordUseCase } from "@core/application/authentication/forgotPassword.use-case";
-import { Registry, container } from "@core/infra/container.registry";
 
-const ForgotPassword = () => {
+import { Registry, container } from "@core/infra/container.registry";
+import { LoginUseCase } from "@core/application/authentication/login.use-case";
+import UserContext from "contexts/UserContext";
+
+const Register = () => {
+    const { setUserData } = React.useContext(UserContext);
     const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const [formOptions, setFormOptions] = React.useState({
-        linkLabel: "Deseja fazer login? Clique aqui",
-        href: "/admin",
-        buttonLabel: "Enviar e-email de recuperação",
+        linkLabel: "Já tem uma conta? Clique aqui",
+        href: "/carrinho",
+        buttonLabel: "Cadastrar",
         isDisabled: false,
     });
-    const resetPasswordService = container.get<ForgotPasswordUseCase>(Registry.ForgotPasswordUseCase);
+    const loginService = container.get<LoginUseCase>(Registry.LoginUseCase);
     const navigate = useNavigate();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setFormOptions({
             ...formOptions,
-            buttonLabel: "Enviando...",
+            buttonLabel: "Cadastrando...",
             isDisabled: true,
         });
 
-        await resetPasswordService.execute(email).then(() => {
-            toast.success("E-mail de recuperação enviado com sucesso.");
-            navigate("/login");
-            }).catch((error) => {
-                console.log("cai no catch")
+        try {
+            await loginService.execute(email, password).then((data) => {
+                toast.success("Usuário cadastrado com sucesso.");
+                setUserData({
+                    email: data?.email,
+                    // @ts-ignore
+                    token: data?.stsTokenManager?.accessToken,
+                });
+                navigate("/carrinho");
+            });
+        } catch (error) {
             setFormOptions({
                 ...formOptions,
-                buttonLabel: "Enviar e-email de recuperação",
+                buttonLabel: "Cadastrar",
                 isDisabled: false,
             });
-            toast.error(
-                "Não foi possível enviar o e-mail de recuperação. Verifique se o e-mail está correto e tente novamente."
-            );
+            toast.error("Não foi possível cadastrar. Tente novamente.");
             console.error(error);
-        })
+        }
     }
 
     return (
         <>
             <div className="container hFlex">
                 <div className="formPage">
-                    <h1>Esqueci minha senha</h1>
-                    <p>Digite seu email para receber um link para redefinição de senha</p>
-                    <form className="formBox hFlex" onSubmit={handleSubmit}>
+                    <h1>Registrar</h1>
+                    <p>Digite seu email e senha para registrar sua conta</p>
+                    <form className="formBox hFlex" onSubmit={(e) => handleSubmit(e)}>
                         <input
                             type="email"
                             placeholder="Digite seu email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Digite sua senha"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <button type="submit" className="loginButton">
                             {formOptions.buttonLabel}
@@ -70,4 +83,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default Register;
