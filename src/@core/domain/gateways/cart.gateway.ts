@@ -10,4 +10,6 @@ export interface CartGateway {
     decrementProduct(productId: string, userId: string): Promise<Cart>;
 
     incrementProduct(productId: string, userId: string): Promise<Cart>;
+
+    deleteAllProducts(userId: string): Promise<Cart>;
 }

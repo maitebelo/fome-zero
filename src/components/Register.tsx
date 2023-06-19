@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Registry, container } from "@core/infra/container.registry";
 import { LoginUseCase } from "@core/application/authentication/login.use-case";
 import UserContext from "contexts/UserContext";
+import { RegisterUseCase } from "@core/application/authentication/register.use-case";
 
 const Register = () => {
     const { setUserData } = React.useContext(UserContext);
@@ -16,7 +17,7 @@ const Register = () => {
         buttonLabel: "Cadastrar",
         isDisabled: false,
     });
-    const loginService = container.get<LoginUseCase>(Registry.LoginUseCase);
+    const loginService = container.get<RegisterUseCase>(Registry.RegisterUseCase);
     const navigate = useNavigate();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,6 +31,7 @@ const Register = () => {
         try {
             await loginService.execute(email, password).then((data) => {
                 toast.success("Usuário cadastrado com sucesso.");
+                console.log(data);
                 setUserData({
                     email: data?.email,
                     // @ts-ignore

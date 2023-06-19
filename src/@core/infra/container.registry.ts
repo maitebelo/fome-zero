@@ -9,6 +9,10 @@ import { CartFirebaseGateway } from "./gateways/cartFirebase.gateway";
 import { MyCartUseCase } from "@core/application/cart/myCart.use-case";
 import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
 import { RemoveProductUseCase } from "@core/application/cart/removeProduct.use-case";
+import { OrderFirebaseGateway } from "./gateways/orderFirebase.gateway";
+import { CreateOrderUseCase } from "@core/application/order/createOrder.use-case";
+import { ListOrderUseCase } from "@core/application/order/listOrder.use-case";
+import { RegisterUseCase } from "@core/application/authentication/register.use-case";
 
 export const Registry = {
     FirestoreAdapter: Symbol.for("FirestoreAdapter"),
@@ -30,6 +34,14 @@ export const Registry = {
     AddProductOnCartUseCase: Symbol.for("AddProductOnCartUseCase"),
 
     RemoveProductUseCase: Symbol.for("RemoveProductUseCase"),
+
+    OrderGateway: Symbol.for("OrderGateway"),
+
+    CreateOrderUseCase: Symbol.for("CreateOrderUseCase"),
+
+    ListOrderUseCase: Symbol.for("ListOrderUseCase"),
+
+    RegisterUseCase: Symbol.for("RegisterUseCase"),
 };
 
 export const container = new Container();
@@ -73,4 +85,23 @@ container.bind(Registry.AddProductOnCartUseCase).toDynamicValue((context) => {
 
 container.bind(Registry.RemoveProductUseCase).toDynamicValue((context) => {
     return new RemoveProductUseCase(context.container.get(Registry.CartGateway));
+});
+
+container.bind(Registry.OrderGateway).toDynamicValue((context) => {
+    return new OrderFirebaseGateway(
+        context.container.get(Registry.FirestoreAdapter),
+        context.container.get(Registry.CartGateway)
+    );
+});
+
+container.bind(Registry.CreateOrderUseCase).toDynamicValue((context) => {
+    return new CreateOrderUseCase(context.container.get(Registry.OrderGateway));
+});
+
+container.bind(Registry.ListOrderUseCase).toDynamicValue((context) => {
+    return new ListOrderUseCase(context.container.get(Registry.OrderGateway));
+});
+
+container.bind(Registry.RegisterUseCase).toDynamicValue((context) => {
+    return new RegisterUseCase(context.container.get(Registry.AuthenticatorGateway));
 });
