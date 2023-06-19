@@ -10,7 +10,7 @@ const Home = () => {
         <div className="hero-content">
           <h1>Delivery de Comida</h1>
           <p>Faça seu pedido agora mesmo e receba em casa!</p>
-          <a href="#" className="headerButton">
+          <a href="#menu" className="headerButton">
             Ver Cardápio
           </a>
           </div>

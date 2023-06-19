@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+ 
 import { ForgotPasswordUseCase } from "@core/application/authentication/forgotPassword.use-case";
 import { Registry, container } from "@core/infra/container.registry";
 

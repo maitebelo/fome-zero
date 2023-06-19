@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -17,6 +17,8 @@ import Login from "components/Login";
 import useToken from "utils/hooks/useToken";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "contexts/UserContext";
+import HistoryScreen from "components/HistoryScreen";
+import Register from "components/Register";
 
 const App = () => {
     return (
@@ -35,9 +37,11 @@ const App = () => {
                             </ProtectedRouteGuard>
                         }
                     ></Route>
+                    <Route path="/history" element={<ProtectedRouteGuard><HistoryScreen /></ProtectedRouteGuard>} />
                     <Route path="/esqueci-minha-senha" element={<ForgotPassword />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/relatar-problema" element={<RelatarProblema/>}/>
+                    <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Navigate replace to="/" />} />
                 </Routes>
                 <Footer />
@@ -51,6 +55,7 @@ function ProtectedRouteGuard({ children }: { children: React.ReactNode }) {
     const token = useToken();
 
     if (!token) {
+        toast.error("Você precisa estar logado para acessar esta página");
         return <Navigate to="/login" />;
     }
 

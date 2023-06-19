@@ -5,35 +5,35 @@ import { toast } from "react-toastify";
 import { Registry, container } from "@core/infra/container.registry";
 import { LoginUseCase } from "@core/application/authentication/login.use-case";
 import UserContext from "contexts/UserContext";
+import { RegisterUseCase } from "@core/application/authentication/register.use-case";
 
-const Login = () => {
+const Register = () => {
     const { setUserData } = React.useContext(UserContext);
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [formOptions, setFormOptions] = React.useState({
-        linkLabel: "Esqueceu a senha? Clique aqui",
+        linkLabel: "Já tem uma conta? Clique aqui",
         href: "/carrinho",
-        buttonLabel: "Entrar",
+        buttonLabel: "Cadastrar",
         isDisabled: false,
     });
-    const loginService = container.get<LoginUseCase>(Registry.LoginUseCase);
+    const loginService = container.get<RegisterUseCase>(Registry.RegisterUseCase);
     const navigate = useNavigate();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setFormOptions({
             ...formOptions,
-            buttonLabel: "Entrando...",
+            buttonLabel: "Cadastrando...",
             isDisabled: true,
         });
 
         try {
             await loginService.execute(email, password).then((data) => {
-                toast.success("Usuário logado com sucesso.");
-                
+                toast.success("Usuário cadastrado com sucesso!");
+                console.log(data);
                 setUserData({
                     email: data?.email,
-                    uid: data?.uid,
                     // @ts-ignore
                     token: data?.stsTokenManager?.accessToken,
                 });
@@ -42,10 +42,10 @@ const Login = () => {
         } catch (error) {
             setFormOptions({
                 ...formOptions,
-                buttonLabel: "Entrar",
+                buttonLabel: "Cadastrar",
                 isDisabled: false,
             });
-            toast.error("Não foi possível logar. Verifique se o email e a senha estão corretos e tente novamente.");
+            toast.error("Não foi possível cadastrar. Tente novamente.");
             console.error(error);
         }
     }
@@ -54,8 +54,8 @@ const Login = () => {
         <>
             <div className="container hFlex">
                 <div className="formPage">
-                    <h1>Login</h1>
-                    <p>Digite seu email e senha para acessar sua conta</p>
+                    <h1>Registrar</h1>
+                    <p>Digite seu email e senha para registrar sua conta</p>
                     <form className="formBox hFlex" onSubmit={(e) => handleSubmit(e)}>
                         <input
                             type="email"
@@ -73,17 +73,16 @@ const Login = () => {
                             {formOptions.buttonLabel}
                         </button>
                     </form>
-                    <NavLink to="/esqueci-minha-senha" className="redirLink">
+                    <NavLink to="/login" className="redirLink">
                         {formOptions.linkLabel}
                     </NavLink>
-                    <NavLink to="/register" className="redirLink">Cadastre sua conta</NavLink>
                 </div>
                 <div>
-                    <img src="./assets/login/login.jpg" alt="About Us" height="500px" width="500px" />
+                    <img src="./assets/about/Image.png" alt="About Us" height="500px" width="500px" />
                 </div>
             </div>
         </>
     );
 };
 
-export default Login;
+export default Register;
