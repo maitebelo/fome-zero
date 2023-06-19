@@ -9,6 +9,7 @@ import UserContext from "contexts/UserContext";
 import { RemoveProductUseCase } from "@core/application/cart/removeProduct.use-case";
 import { Product } from "@core/domain/entities/Products";
 import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
+import { CreateOrderUseCase } from "@core/application/order/createOrder.use-case";
 
 const Carrinho = () => {
     const { userData } = React.useContext(UserContext);
@@ -41,10 +42,35 @@ const Carrinho = () => {
 
         const message = `Olá, gostaria de fazer o pedido:%0A - ${products}%0A%0ATotal: R$ ${totalPrice?.toFixed(2)}`;
 
-        window.open(`https://wa.me/5511999999999?text=${message}`, "_blank");
+        createOrder().then(() => {
+            window.open(`https://wa.me/5511999999999?text=${message}`, "_blank");
 
-        toast.success("Pedido enviado no whatsapp");
+            toast.success("Pedido enviado no whatsapp");
+        });
     }
+
+    const createOrder = async () => {
+        toast.loading("Criando pedido");
+
+        const orderUseCase = container.get<CreateOrderUseCase>(Registry.CreateOrderUseCase);
+
+        if (!cart?.products || cart?.products?.length === 0) {
+            toast.error("Você precisa ter produtos no carrinho para criar um pedido");
+            return;
+        }
+
+        await orderUseCase.execute(cart?.products, userData?.uid);
+
+        getCart().then((response) => {
+            if (!response) {
+                setIsntCart(true);
+            }
+
+            setCart(response);
+        });
+        toast.dismiss();
+        toast.success("Pedido criado");
+    };
 
     const removeProduct = async (item: Product) => {
         toast.loading("Removendo produto do carrinho");
@@ -116,26 +142,17 @@ const Carrinho = () => {
                                     <img src={item?.image} alt={item.name} />
                                     <div className="hFlex">
                                         <h2 className="itemName">{item?.name}</h2>
-                                        <button
-                                            onClick={() => removeProduct(item)}
-                                            className="cart-button"
-                                        >
+                                        <button onClick={() => removeProduct(item)} className="cart-button">
                                             <BsFillTrashFill size={20} />
                                         </button>
                                     </div>
                                     <p className="itemDescription">{item.description}</p>
                                     <div className="hFlex mLRAuto">
-                                        <button
-                                            onClick={() => decrementProduct(item)}
-                                            className="cart-button"
-                                        >
+                                        <button onClick={() => decrementProduct(item)} className="cart-button">
                                             -
                                         </button>
                                         <span>{item.quantity}</span>
-                                        <button
-                                            onClick={() => incrementProduct(item)}
-                                            className="cart-button"
-                                        >
+                                        <button onClick={() => incrementProduct(item)} className="cart-button">
                                             +
                                         </button>
                                     </div>

@@ -5,10 +5,12 @@ import { Registry, container } from "../@core/infra/container.registry";
 import { Product } from "@core/domain/entities/Products";
 import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
 import UserContext from "contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const MenuCard = ({ item }: { item: Product }) => {
     const { userData } = React.useContext(UserContext);
     const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
+    const navigate = useNavigate();
 
     function handleAddProduct(id: string) {
         const addProductUseCase = container.get<AddProductOnCartUseCase>(Registry.AddProductOnCartUseCase);
@@ -16,9 +18,16 @@ const MenuCard = ({ item }: { item: Product }) => {
         setButtonLoading(true);
 
         const cart = async () => {
+            if (!userData?.uid) {
+                toast.error("Você precisa estar logado para adicionar produtos ao carrinho");
+
+                navigate("/login");
+                return;
+            }
+
             return await addProductUseCase.execute(id, 1, userData?.uid);
         };
-        
+
         cart().then((response) => {
             setButtonLoading(false);
             toast.success("Produto adicionado ao carrinho");
