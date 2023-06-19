@@ -1,11 +1,13 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 import { Registry, container } from "../@core/infra/container.registry";
 import { ListProductUseCase } from "../@core/application/products/listProducts.use-case";
-import { Product } from "@core/domain/entities/Products";
+import { Product, ProductProps } from "@core/domain/entities/Products";
+import { AddProductOnCartUseCase } from "@core/application/cart/addProductOnCart.use-case";
+import MenuCard from "./MenuCard";
 
 const Menu = () => {
-    
     const [menu, setMenu] = React.useState<Product[] | []>([]);
 
     React.useEffect(() => {
@@ -24,17 +26,9 @@ const Menu = () => {
         <section className="menu">
             <h1 className="headerh1">Cardápio</h1>
             {menu.length > 0 ? (
-                <div className="menu">
+                <div className="menu-list">
                     {menu.map((item) => (
-                        <div className="menu-item" key={item.id}>
-                            <img src={item.image} alt={item.name} />
-                            <h2 className="itemName">{item.name}</h2>
-                            <p className="itemDescription">{item.description}</p>
-                            <span>R$ {item.price}</span>
-                            <a href="#" className="button">
-                                Adicionar ao carrinho
-                            </a>
-                        </div>
+                            <MenuCard item={item} key={item?.id}/>
                     ))}
                 </div>
             ) : (
