@@ -30,7 +30,7 @@ const Register = () => {
 
         try {
             await loginService.execute(email, password).then((data) => {
-                toast.success("Usuário cadastrado com sucesso.");
+                toast.success("Usuário cadastrado com sucesso!");
                 console.log(data);
                 setUserData({
                     email: data?.email,
