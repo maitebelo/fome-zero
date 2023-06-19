@@ -5,8 +5,8 @@ const RelatarProblema = () => {
         <>
             <div className="container hFlex">
                 <div className="formPage">
-                    <h1>Relatar um Bug</h1>
-                    <p>Digite sua experiência com erros no App</p>
+                    <h1>Relatar problema</h1>
+                    <p>Digite sua experiência no App</p>
                     <form className="formBox hFlex">
                         <input
                             type="text"

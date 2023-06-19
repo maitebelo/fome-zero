@@ -18,11 +18,9 @@ const MenuCard = ({ item }: { item: Product }) => {
         setButtonLoading(true);
 
         const cart = async () => {
-            if (!userData?.uid) {
-                toast.error("Você precisa estar logado para adicionar produtos ao carrinho");
-
-                navigate("/login");
-                return;
+            if (!userData?.uid) { 
+                navigate("/login"); 
+                throw new Error("Login Requerido.");
             }
 
             return await addProductUseCase.execute(id, 1, userData?.uid);
@@ -31,7 +29,11 @@ const MenuCard = ({ item }: { item: Product }) => {
         cart().then((response) => {
             setButtonLoading(false);
             toast.success("Produto adicionado ao carrinho");
-        });
+        })
+        .catch(() => {
+            setButtonLoading(false); 
+            toast.error("Você precisa estar logado para adicionar produtos ao carrinho");
+        })
     }
 
     return (

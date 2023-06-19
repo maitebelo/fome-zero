@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom"; 
 
 const HistoricoPedidos = () => {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ const HistoricoPedidos = () => {
                 <button onClick={() => navigate("/history")}>Exibir Histórico de Pedidos</button>
             </div>
             <div>
-                <button className="btnproblema">Relatar um Problema</button>
+                <NavLink className="nav-link" to="/relatar-problema"><button className="btnproblema"> Relatar um Problema</button></NavLink>
             </div>
         </section>
     );

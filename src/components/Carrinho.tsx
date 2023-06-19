@@ -110,18 +110,19 @@ const Carrinho = () => {
 
     const decrementProduct = async (item: Product) => {
         toast.loading("Decrementando produto no carrinho");
-
+    
         const removeProductUseCase = container.get<RemoveProductUseCase>(Registry.RemoveProductUseCase);
-
+    
         await removeProductUseCase.decrement(item.id, userData?.uid);
-
+    
         getCart().then((response) => {
             if (!response) {
                 setIsntCart(true);
             }
-
+    
             setCart(response);
         });
+    
         toast.dismiss();
         toast.success("Produto decrementado no carrinho");
     };
@@ -148,9 +149,11 @@ const Carrinho = () => {
                                     </div>
                                     <p className="itemDescription">{item.description}</p>
                                     <div className="hFlex mLRAuto">
-                                        <button onClick={() => decrementProduct(item)} className="cart-button">
-                                            -
+                                    <button onClick={() => decrementProduct(item)} className="cart-button" 
+                                    style={{ display: item.quantity <= 1 ? 'none' : 'block' }}>
+                                        - 
                                         </button>
+
                                         <span>{item.quantity}</span>
                                         <button onClick={() => incrementProduct(item)} className="cart-button">
                                             +
