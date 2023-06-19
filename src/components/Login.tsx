@@ -76,7 +76,7 @@ const Login = () => {
                     </NavLink>
                 </div>
                 <div>
-                    <img src="./assets/about/Image.png" alt="About Us" height="500px" width="500px" />
+                    <img src="./assets/login/login.jpg" alt="About Us" height="500px" width="500px" />
                 </div>
             </div>
         </>

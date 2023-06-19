@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import AboutUs from "./components/AboutUs";
 import Carrinho from "./components/Carrinho";
 import ForgotPassword from "components/ForgotPassword";
+import RelatarProblema from "components/RelatarProblema";
 
 import "./styles/reset.css";
 import "./styles/App.css";
@@ -36,6 +37,7 @@ const App = () => {
                     ></Route>
                     <Route path="/esqueci-minha-senha" element={<ForgotPassword />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/relatar-problema" element={<RelatarProblema/>}/>
                     <Route path="/" element={<Navigate replace to="/" />} />
                 </Routes>
                 <Footer />
