@@ -37,10 +37,17 @@ const App = () => {
                             </ProtectedRouteGuard>
                         }
                     ></Route>
-                    <Route path="/history" element={<ProtectedRouteGuard><HistoryScreen /></ProtectedRouteGuard>} />
+                    <Route
+                        path="/history"
+                        element={
+                            <ProtectedRouteGuard>
+                                <HistoryScreen />
+                            </ProtectedRouteGuard>
+                        }
+                    />
                     <Route path="/esqueci-minha-senha" element={<ForgotPassword />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/relatar-problema" element={<RelatarProblema/>}/>
+                    <Route path="/relatar-problema" element={<RelatarProblema />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={<Navigate replace to="/" />} />
                 </Routes>

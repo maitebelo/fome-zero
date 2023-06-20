@@ -4,19 +4,13 @@ import { Order } from "@core/domain/entities/Order";
 import { Registry, container } from "@core/infra/container.registry";
 import { ListOrderUseCase } from "@core/application/order/listOrder.use-case";
 import UserContext from "contexts/UserContext";
+import { NavLink } from "react-router-dom";
 
 export default function HistoryScreen() {
     const { userData } = React.useContext(UserContext);
     const listOrderUseCase = container.get<ListOrderUseCase>(Registry.ListOrderUseCase);
     const [isOrder, setIsntOrder] = React.useState<boolean>(false);
     const [orders, setOrder] = React.useState<Order[]>([]);
-
-    /*   const orders = [
-    { id: 1, items: ['Pizza', 'Refrigerante'] },
-    { id: 2, items: ['Hambúrguer', 'Batatas Fritas'] },
-    { id: 3, items: ['Sushi', 'Molho de Soja'] },
-    { id: 4, items: ['Salada', 'Água'] },
-  ]; */
 
     const handleReportProblem = (orderId: string) => {
         console.log(`Relatando problema para o pedido com o ID ${orderId}`);
@@ -31,7 +25,7 @@ export default function HistoryScreen() {
             if (!response) {
                 setIsntOrder(true);
             }
-            console.log(response);
+
             setOrder(response);
         });
     }, []);
@@ -49,9 +43,14 @@ export default function HistoryScreen() {
                                 return <li key={index}>{item.name}</li>;
                             })}
                         </ul>
-                        <button className="btnproblema" onClick={() => handleReportProblem(order.id)}>
-                            Relatar Problema
-                        </button>
+                        <NavLink
+                            to="/relatar-problema"
+                            style={{
+                                textDecoration: "none",
+                            }}
+                        >
+                            <button className="btnproblema"> Relatar um Problema</button>
+                        </NavLink>
                     </div>
                 ))}
             </div>

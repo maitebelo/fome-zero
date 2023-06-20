@@ -3,29 +3,44 @@ import { OrderGateway } from "@core/domain/gateways/order.gateway";
 import { Order } from "@core/domain/entities/Order";
 import { ProductWithData } from "@core/domain/entities/Cart";
 import { CartFirebaseGateway } from "./cartFirebase.gateway";
+import { Product } from "@core/domain/entities/Products";
 
 export class OrderFirebaseGateway implements OrderGateway {
     constructor(private firestore: firebase.firestore.Firestore, private cartGateway: CartFirebaseGateway) {}
 
-     async listOrder(userId: string): Promise<Order[]> {
+    async listOrder(userId: string): Promise<Order[]> {
         try {
-            return await this.firestore
-                .collection("orders")
-                .where("userId", "==", userId)
-                .get()
-                .then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => {
-                        const data = doc.data();
-                        return new Order({
-                            id: doc.id,
-                            products: data.products,
-                            total: data.total,
-                            userId: data.userId,
-                            createdAt: data.createdAt,
-                            updatedAt: data.updatedAt,
-                        });
+            const querySnapshot = await this.firestore.collection("orders").where("userId", "==", userId).get();
+
+            const orders = await Promise.all(
+                querySnapshot.docs.map(async (doc) => {
+                    const data = doc.data();
+                    const products = await Promise.all(
+                        data?.products?.map(async (product: any) => {
+                            const productData = await product?.product?.get();
+                            return {
+                                id: productData?.id,
+                                name: productData.data()?.name,
+                                price: productData.data()?.price,
+                                description: productData.data()?.description,
+                                image: productData.data()?.image,
+                                quantity: product.quantity,
+                            };
+                        })
+                    );
+
+                    return new Order({
+                        id: doc.id,
+                        products: products,
+                        total: data.total,
+                        userId: data.userId,
+                        createdAt: data.createdAt,
+                        updatedAt: data.updatedAt,
                     });
-                });
+                })
+            );
+
+            return orders;
         } catch (error) {
             console.error(error);
             throw new Error("Method not implemented.");
