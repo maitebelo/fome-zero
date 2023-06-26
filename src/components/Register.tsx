@@ -13,7 +13,7 @@ const Register = () => {
     const [password, setPassword] = React.useState("");
     const [formOptions, setFormOptions] = React.useState({
         linkLabel: "Já tem uma conta? Clique aqui",
-        href: "/carrinho",
+        href: "/logiin",
         buttonLabel: "Cadastrar",
         isDisabled: false,
     });
@@ -37,7 +37,7 @@ const Register = () => {
                     // @ts-ignore
                     token: data?.stsTokenManager?.accessToken,
                 });
-                navigate("/carrinho");
+                navigate("/login");
             });
         } catch (error) {
             setFormOptions({
